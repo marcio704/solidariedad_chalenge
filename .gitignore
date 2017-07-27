@@ -1,0 +1,14 @@
+venv
+.idea
+*.pyc
+/static
+/staticfiles
+/media
+/htmlcov
+/build
+/temp
+/logs
+.coverage
+node_modules
+*.map
+.DS_Store
