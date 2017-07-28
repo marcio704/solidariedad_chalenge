@@ -35,7 +35,7 @@ In order to use the Banco app (banco.html)
 
 Go to:
 
-http://localhost:9000/banco/`
+http://localhost:9000/banco/
 
 
 In case you want to log on Django Admin, there's a default admin user already created:
@@ -44,7 +44,7 @@ URL: http://localhost:8000/admin
 
 User: admin
 
-Password: mgderune2k`
+Password: mgderune2k
 
 
 
