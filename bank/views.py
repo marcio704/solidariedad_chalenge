@@ -41,7 +41,7 @@ class AccountViewSet(mixins.ListModelMixin,
         value = request.data.get("valor", None)
 
         try:
-            withdraw_result = withdraw(value, conta)
+            withdraw_result = conta_serializer.withdraw(value, conta)
         except ValueError as ve:
             return Response({"detail": "Could not withdraw: {0}.".format(ve),
                              "status_code": status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)

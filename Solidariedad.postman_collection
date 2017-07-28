@@ -1,0 +1,104 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Solidariedad",
+		"_postman_id": "37d1fa5c-4e29-1ae0-4f3e-99ee6d6d9d7f",
+		"description": "Requests from Bank Test app\n",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Account - List",
+			"request": {
+				"url": "http://localhost:8000/bank/conta",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Account - Create",
+			"request": {
+				"url": "http://localhost:8000/bank/conta/",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"nome\": \"Marcio Santiago\",\n\t\"saldo\": \"863\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Account - Retrieve",
+			"request": {
+				"url": "http://localhost:8000/bank/conta/1/",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Account - Withdraw",
+			"request": {
+				"url": "http://localhost:8000/bank/conta/1/saque/",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"valor\": 18\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "ATM - List",
+			"request": {
+				"url": "http://localhost:8000/bank/caixa/",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "ATM - Create",
+			"request": {
+				"url": "http://localhost:8000/bank/caixa/",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"1\": 10,\n    \"2\": 10,\n    \"5\": 10,\n    \"10\": 10,\n    \"20\": 10,\n    \"50\": 10,\n    \"100\": 10\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
