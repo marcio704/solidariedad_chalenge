@@ -8,11 +8,17 @@ class Conta(TimeStampedModel):
     nome = models.CharField(max_length=150, null=False, blank=False, db_index=True)
     saldo = models.FloatField(default=0, null=False, blank=False)
 
+    __saldo_original = None
+
     class Meta:
         ordering = ['id']
 
     def __str__(self):
         return "%s: %s" % (self.nome, self.saldo)
+
+    def __init__(self, *args, **kwargs):
+        super(Conta, self).__init__(*args, **kwargs)
+        self.__saldo_original = self.saldo
 
 
 class Cedula(TimeStampedModel):
@@ -35,3 +41,8 @@ class ATM(TimeStampedModel):
 
     def __str__(self):
         return "%s: %s" % (self.cedula.descricao, self.quantidade)
+
+
+class HistoricoConta(TimeStampedModel):
+    conta = models.ForeignKey(Conta, null=False, blank=False)
+    valor = models.FloatField(default=0, null=False, blank=False)

@@ -6,3 +6,4 @@ from bank.models import *
 admin.site.register(Conta)
 admin.site.register(Cedula)
 admin.site.register(ATM)
+admin.site.register(HistoricoConta)

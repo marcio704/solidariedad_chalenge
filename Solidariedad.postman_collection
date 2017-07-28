@@ -70,6 +70,37 @@
 			"response": []
 		},
 		{
+			"name": "Account - Transactions History",
+			"request": {
+				"url": "http://localhost:8000/conta/1/extrato/",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Account - Transfer",
+			"request": {
+				"url": "http://localhost:8000/conta/1/transferencia/",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id_conta\": 2,\n\t\"valor\": 70\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
 			"name": "ATM - List",
 			"request": {
 				"url": "http://localhost:8000/caixa/",

@@ -21,6 +21,49 @@ class ContaSerializer(serializers.ModelSerializer):
         :param conta:
         :return:
         """
+        self.validate_value(value, conta)
+        count = self.count_cedulas(value)
+
+        # Decrease used bank notes from database all at once together in a unique transaction:
+        with transaction.atomic():
+            # Update Account value:
+            conta.saldo -= value
+            conta.save()
+
+            # Update ATM:
+            for registro_atm in count["atm"]:
+                registro_atm.save()
+
+        return count["cedulas"]
+
+    @transaction.atomic
+    def transfer(self, origin_account, destiny_account, amount):
+        """
+        Transfers a given amount from one account to other.
+        :param origin_account:
+        :param destiny_account:
+        :param amount:
+        :return:
+        """
+        self.validate_value(amount, origin_account)
+        count = self.count_cedulas(amount)
+        destiny_account = Conta.objects.get(id=destiny_account)
+
+        with transaction.atomic():
+            origin_account.saldo -= amount
+            origin_account.save()
+
+            destiny_account.saldo += amount
+            destiny_account.save()
+
+            # Update ATM:
+            for registro_atm in count["atm"]:
+                registro_atm.save()
+
+        return {"conta_origem_id": origin_account.id, "conta_destino_id": destiny_account.id, "valor": amount}
+
+    @staticmethod
+    def validate_value(value, conta):
         if value is None:
             raise ValueError("The following fields are mandatory: [valor]")
         try:
@@ -32,9 +75,15 @@ class ContaSerializer(serializers.ModelSerializer):
         if value > conta.saldo:
             raise ValueError("The given account doesn't have enough balance")
 
+    @staticmethod
+    def count_cedulas(value):
+        """
+        Count number of bank notes for the transaction
+        :param value:
+        :return: dict
+        """
         atm = ATM.objects.all().order_by('-cedula__valor')
-        cedulas = {str(item.cedula.valor): 0 for item in atm}
-        cedulas = collections.OrderedDict(cedulas)
+        cedulas = collections.OrderedDict({str(item.cedula.valor): 0 for item in atm})
         current_amount_missing = value
 
         # Count number of bank notes:
@@ -60,17 +109,7 @@ class ContaSerializer(serializers.ModelSerializer):
         if current_amount_missing > 0:
             raise ValueError("Not enough bank notes")
 
-        # Decrease used bank notes from database all at once together in a unique transaction:
-        with transaction.atomic():
-            # Update Account value:
-            conta.saldo -= value
-            conta.save()
-
-            # Update ATM:
-            for registro_atm in atm:
-                registro_atm.save()
-
-        return cedulas
+        return {"atm": atm, "cedulas": cedulas}
 
 
 class ContaRetrieveSerializer(serializers.ModelSerializer):
@@ -115,3 +154,15 @@ class ATMSerializer(serializers.ModelSerializer):
                 registros_atm[str(registro_atm.cedula.valor)] = registro_atm.quantidade
 
         return registros_atm
+
+
+class HistoricoContaSerializer(serializers.ModelSerializer):
+    date = serializers.SerializerMethodField()
+
+    class Meta:
+        model = HistoricoConta
+        fields = ('id', 'valor', 'date')
+
+    @staticmethod
+    def get_date(instance):
+        return instance.created

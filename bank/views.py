@@ -38,17 +38,61 @@ class AccountViewSet(mixins.ListModelMixin,
         :param kwargs:
         :return:
         """
-        conta = self.get_object()
-        conta_serializer = self.get_serializer()
+        account = self.get_object()
+        account_serializer = self.get_serializer()
         value = request.data.get("valor", None)
 
         try:
-            withdraw_result = conta_serializer.withdraw(value, conta)
+            withdraw_result = account_serializer.withdraw(value, account)
         except ValueError as ve:
             return Response({"detail": "Could not withdraw: {0}.".format(ve),
                              "status_code": status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(withdraw_result)
+
+    @detail_route(methods=["GET"], url_path="extrato")
+    def history(self, request, *args, **kwargs):
+        """
+        Shows account transactions history.
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        account = self.get_object()
+
+        try:
+            history = HistoricoConta.objects.filter(conta=account).order_by('-created')
+        except ObjectDoesNotExist as obj:
+            return Response({"detail": "Could not find history for thus account",
+                             "status_code": status.HTTP_404_NOT_FOUND}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response(HistoricoContaSerializer(history, many=True).data)
+
+    @detail_route(methods=["POST"], url_path="transferencia")
+    def transfer(self, request, *args, **kwargs):
+        """
+        Transfers a given amount from one account to other.
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        origin_account = self.get_object()
+        destiny_account = request.data.get("id_conta", None)
+        amount = request.data.get("valor", None)
+        account_serializer = self.get_serializer()
+
+        try:
+            transfer = account_serializer.transfer(origin_account, destiny_account, amount)
+        except ObjectDoesNotExist as obj:
+            return Response({"detail": "Could not transfer the amount: Destiny account does not exist.",
+                             "status_code": status.HTTP_404_NOT_FOUND}, status=status.HTTP_404_NOT_FOUND)
+        except ValueError as ve:
+            return Response({"detail": "Could not transfer the amount: {0}.".format(ve),
+                             "status_code": status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(transfer)
 
 
 class ATMViewSet(mixins.ListModelMixin,

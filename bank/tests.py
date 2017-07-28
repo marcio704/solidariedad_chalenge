@@ -19,7 +19,7 @@ class AccountAPITests(APITestCase):
         self.account_1 = Conta(nome="Teste 1", saldo=18)
         self.account_1.save()
 
-        self.account_2 = Conta(nome="Teste 2", saldo=200)
+        self.account_2 = Conta(nome="Teste 2", saldo=300)
         self.account_2.save()
 
         # Creating Cedulas for testing purposes.
@@ -45,7 +45,7 @@ class AccountAPITests(APITestCase):
         self.bank_note_100.save()
 
         # Creating ATM charges
-        self.atm_record_1 = ATM(cedula=self.bank_note_1, quantidade=1)
+        self.atm_record_1 = ATM(cedula=self.bank_note_1, quantidade=2)
         self.atm_record_1.save()
 
         self.atm_record_2 = ATM(cedula=self.bank_note_2, quantidade=1)
@@ -218,6 +218,58 @@ class AccountAPITests(APITestCase):
         url = reverse('bank:account-detail', kwargs={'pk': self.account_2.id})
         response = self.client.post(url + "saque/", data=data, format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_get_api_withdraw_history(self):
+        """
+        Tests withdraw history endpoint API.
+        """
+        data = {
+            "valor": 18
+        }
+        url = reverse('bank:account-detail', kwargs={'pk': self.account_1.id})
+        response = self.client.get(url + "extrato/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_post_api_transfer(self):
+        """
+        Tests transfer endpoint API.
+        """
+        data = {
+            "id_conta": 1,
+            "valor": 70
+        }
+        url = reverse('bank:account-detail', kwargs={'pk': self.account_2.id})
+        response = self.client.post(url + "transferencia/", data=data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()
+        self.assertEqual(data['conta_origem_id'], 2)
+        self.assertEqual(data['conta_destino_id'], 1)
+        self.assertEqual(data['valor'], 70)
+
+    def test_post_api_transfer_404_origin(self):
+        """
+        Tests transfer 404 endpoint API.
+        """
+        data = {
+            "id_conta": 1,
+            "valor": 1
+        }
+        url = reverse('bank:account-detail', kwargs={'pk': 9999})
+        response = self.client.post(url + "transferencia/", data=data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_post_api_transfer_404_destiny(self):
+        """
+        Tests transfer 404 endpoint API.
+        """
+        data = {
+            "id_conta": 9999,
+            "valor": 1
+        }
+        url = reverse('bank:account-detail', kwargs={'pk': self.account_2.id})
+        response = self.client.post(url + "transferencia/", data=data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
 class ATMAPITests(APITestCase):
