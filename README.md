@@ -16,9 +16,19 @@ Create virtualenv and install dependencies:
 
 `$ pip install -r requirements.txt`
 
+
 Run app locally:
 
+For the first time running, collect static files:
+
+`python manage.py collectstatic`
+
+`python manage.py migrate`
+
+Then:
+
 `python manage.py runserver localhost:8000`
+
 
 In case you want to log on Django Admin, there's a default admin user already created:
 

@@ -6,7 +6,7 @@ from django_extensions.db.models import TimeStampedModel
 
 class Conta(TimeStampedModel):
     nome = models.CharField(max_length=150, null=False, blank=False, db_index=True)
-    saldo = models.FloatField(default=0, null=False)
+    saldo = models.FloatField(default=0, null=False, blank=False)
 
     class Meta:
         ordering = ['id']

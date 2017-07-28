@@ -105,6 +105,6 @@ class ATMSerializer(serializers.ModelSerializer):
                     registro_atm = ATM(cedula=cedula, quantidade=quantidade)
 
                 registro_atm.save()
-                registros_atm[str(registro_atm.cedula.valor)] = str(registro_atm.quantidade)
+                registros_atm[str(registro_atm.cedula.valor)] = registro_atm.quantidade
 
         return registros_atm
