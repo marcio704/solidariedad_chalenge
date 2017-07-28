@@ -23,7 +23,9 @@ class ContaSerializer(serializers.ModelSerializer):
         """
         if value is None:
             raise ValueError("The following fields are mandatory: [valor]")
-        if type(value) is not int:
+        try:
+            value = int(value)
+        except ValueError:
             raise ValueError("Field 'valor' must be an integer")
         if value < 0:
             raise ValueError("Field 'valor' must be positive")
@@ -60,6 +62,11 @@ class ContaSerializer(serializers.ModelSerializer):
 
         # Decrease used bank notes from database all at once together in a unique transaction:
         with transaction.atomic():
+            # Update Account value:
+            conta.saldo -= value
+            conta.save()
+
+            # Update ATM:
             for registro_atm in atm:
                 registro_atm.save()
 

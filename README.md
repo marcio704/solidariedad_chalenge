@@ -29,6 +29,14 @@ Then:
 
 `python manage.py runserver localhost:8000`
 
+In order to use the Banco app (banco.html)
+
+`python manage.py runserver localhost:9000`
+
+Go to:
+
+http://localhost:9000/banco/`
+
 
 In case you want to log on Django Admin, there's a default admin user already created:
 
@@ -36,12 +44,12 @@ URL: http://localhost:8000/admin
 
 User: admin
 
-Password: mgderune2k
+Password: mgderune2k`
 
 
 
-TESTS
-=====
+UNIT TESTS
+==========
 
 `$ cd solidaridad`
 

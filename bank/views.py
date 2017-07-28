@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
@@ -81,3 +83,13 @@ class ATMViewSet(mixins.ListModelMixin,
         atm = atm_serializer.create(request.data)
 
         return Response(atm)
+
+
+@csrf_exempt
+def index(request):
+    """
+    Displays home page
+    :param request:
+    :return:
+    """
+    return render(request, 'domain/banco.html')

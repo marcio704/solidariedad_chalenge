@@ -19,9 +19,11 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 from bank import urls as bank_urls
+from bank import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^banco/', views.index, name='index'),
     url(r'^', include(bank_urls, namespace='bank')),
 ]
 
