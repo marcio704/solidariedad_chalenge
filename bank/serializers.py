@@ -27,7 +27,7 @@ class ContaSerializer(serializers.ModelSerializer):
         # Decrease used bank notes from database all at once together in a unique transaction:
         with transaction.atomic():
             # Update Account value:
-            conta.saldo -= value
+            conta.saldo -= int(value)
             conta.save()
 
             # Update ATM:
@@ -84,7 +84,7 @@ class ContaSerializer(serializers.ModelSerializer):
         """
         atm = ATM.objects.all().order_by('-cedula__valor')
         cedulas = collections.OrderedDict({str(item.cedula.valor): 0 for item in atm})
-        current_amount_missing = value
+        current_amount_missing = int(value)
 
         # Count number of bank notes:
         for registro_atm in atm:
