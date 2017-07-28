@@ -22,6 +22,6 @@ from bank import urls as bank_urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^bank/', include(bank_urls, namespace='bank')),
+    url(r'^', include(bank_urls, namespace='bank')),
 ]
 

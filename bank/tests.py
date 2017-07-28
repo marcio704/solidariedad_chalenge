@@ -19,7 +19,7 @@ class AccountAPITests(APITestCase):
         self.account_1 = Conta(nome="Teste 1", saldo=18)
         self.account_1.save()
 
-        self.account_2 = Conta(nome="Teste 2", saldo=170)
+        self.account_2 = Conta(nome="Teste 2", saldo=200)
         self.account_2.save()
 
         # Creating Cedulas for testing purposes.
@@ -193,7 +193,7 @@ class AccountAPITests(APITestCase):
         response = self.client.post(url + "saque/", data=data, format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        # Withdraw the rest balance with the last 100 bank note available:
+        # Withdraw the last 100 bank note available:
         data = {
             "valor": 100
         }
@@ -210,6 +210,14 @@ class AccountAPITests(APITestCase):
         self.assertEqual(data['20'], 0)
         self.assertEqual(data['50'], 0)
         self.assertEqual(data['100'], 1)
+
+        # Try to withdraw from empty ATM:
+        data = {
+            "valor": 20
+        }
+        url = reverse('bank:account-detail', kwargs={'pk': self.account_2.id})
+        response = self.client.post(url + "saque/", data=data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
 class ATMAPITests(APITestCase):

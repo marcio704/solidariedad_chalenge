@@ -10,7 +10,7 @@
 		{
 			"name": "Account - List",
 			"request": {
-				"url": "http://localhost:8000/bank/conta",
+				"url": "http://localhost:8000/conta/",
 				"method": "GET",
 				"header": [],
 				"body": {},
@@ -21,7 +21,7 @@
 		{
 			"name": "Account - Create",
 			"request": {
-				"url": "http://localhost:8000/bank/conta/",
+				"url": "http://localhost:8000/conta/",
 				"method": "POST",
 				"header": [
 					{
@@ -32,7 +32,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"nome\": \"Marcio Santiago\",\n\t\"saldo\": \"863\"\n}"
+					"raw": "{\n\t\"nome\": \"Vitor Santiago\",\n\t\"saldo\": \"863\"\n}"
 				},
 				"description": ""
 			},
@@ -41,7 +41,7 @@
 		{
 			"name": "Account - Retrieve",
 			"request": {
-				"url": "http://localhost:8000/bank/conta/1/",
+				"url": "http://localhost:8000/conta/1/",
 				"method": "GET",
 				"header": [],
 				"body": {},
@@ -52,7 +52,7 @@
 		{
 			"name": "Account - Withdraw",
 			"request": {
-				"url": "http://localhost:8000/bank/conta/1/saque/",
+				"url": "http://localhost:8000/conta/1/saque/",
 				"method": "POST",
 				"header": [
 					{
@@ -72,7 +72,7 @@
 		{
 			"name": "ATM - List",
 			"request": {
-				"url": "http://localhost:8000/bank/caixa/",
+				"url": "http://localhost:8000/caixa/",
 				"method": "GET",
 				"header": [],
 				"body": {},
@@ -83,7 +83,7 @@
 		{
 			"name": "ATM - Create",
 			"request": {
-				"url": "http://localhost:8000/bank/caixa/",
+				"url": "http://localhost:8000/caixa/",
 				"method": "POST",
 				"header": [
 					{
